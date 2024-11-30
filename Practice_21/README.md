@@ -3,87 +3,63 @@
 
 ## Практика #1
 
-Приведите примеры использования различных спецификаторов доступа для внутренних классов и объясните их поведение.
+Приведите пример кода, демонстрирующего невозможность переопределять в подклассе final-метод суперкласса.
 
 ```java
-public class Main {
-    // Приватный внутренний класс
-    private class PrivateInner {
+class SuperClass {
+    // Этот метод не может быть переопределён, так как он final
+    public final void display() {
+        System.out.println("Метод display() в SuperClass");
     }
+}
 
-    // Защищенный внутренний класс
-    protected class ProtectedInner {
+class SubClass extends SuperClass {
+    // Попытка переопределить final-метод вызовет ошибку компиляции
+    @Override
+    public void display() {
+        System.out.println("Метод display() в SubClass");
     }
+}
 
-    // Публичный внутренний класс
-    public class PublicInner {
-    }
+public class TestFinalMethod {
+    public static void main(String[] args) {
+        SuperClass superClass = new SuperClass();
+        superClass.display();  // Выведет: Метод display() в SuperClass
 
-    // Пакетный (по умолчанию) внутренний класс
-    class PackagePrivateInner {
-    }
-
-    public void main() {
-        PrivateInner privateInner = new PrivateInner();
-
-        ProtectedInner protectedInner = new ProtectedInner();
-
-        PublicInner publicInner = new PublicInner();
-
-        PackagePrivateInner packagePrivateInner = new PackagePrivateInner();
+        SubClass subClass = new SubClass();
+        subClass.display();    // Это невозможно, так как компилятор выдаст ошибку
     }
 }
 
 ```
-
-- `PrivateInner`: доступен только внутри `Main`.
-- `ProtectedInner`: доступен внутри `Main`, а также в подклассах и классах в том же пакете.
-- `PublicInner`: доступен из любого места, где доступен `Main`.
-- `PackagePrivateInner`: доступен только в пределах одного пакета.
 
 ## Практика #2: 
 
-Имеет ли внутренний класс доступ к полям и методам внешнего класса? Как возможность доступа зависит от спецификаторов доступа? Приведите примеры кода.
+Приведите пример кода, демонстрирующего невозможность использовать наследование для final-класса.
 
 ```java
-public class Main {
-    private String outerField = "Outer Field";
-
-    public class InnerClass {
-        void accessOuter() {
-            System.out.println(outerField);
-        }
-    }
-
-    public void testInnerAccess() {
-        InnerClass inner = new InnerClass();
-        inner.accessOuter();
+// Финальный класс
+final class FinalClass {
+    public void display() {
+        System.out.println("Это финальный класс.");
     }
 }
-```
 
-Внутренний класс `InnerClass` имеет доступ ко всем полям и методам внешнего класса `Main`, независимо от их спецификаторов доступа. В данном примере `InnerClass` может получить доступ к `outerField`, который является приватным.
-
-## Практика #3: 
-
-Имеет ли внешний класс доступ к полям и методам внутреннего класса? Как возможность доступа зависит от спецификаторов доступа? Приведите примеры кода.
-
-```java
-public class Main {
-    public class InnerClass {
-        private String innerField = "Inner Field";
-
-        public void innerMethod() {
-            System.out.println("Inner Method");
-        }
-    }
-
-    public void accessInner() {
-        InnerClass inner = new InnerClass();
-        System.out.println(inner.innerField); // Ошибка: innerField имеет private доступ
-        inner.innerMethod(); // Доступен, так как метод public
+// Попытка наследования от финального класса вызовет ошибку компиляции
+class SubClass extends FinalClass {
+    public void show() {
+        System.out.println("Это подкласс.");
     }
 }
-```
 
-Внешний класс `Main` может получить доступ к публичным методам внутреннего класса `InnerClass`, но не может получить доступ к его приватным полям. В данном примере `innerField` недоступен, так как он имеет спецификатор доступа `private`, в то время как `innerMethod` доступен, так как он публичный.
+public class TestFinalClass {
+    public static void main(String[] args) {
+        FinalClass finalClass = new FinalClass();
+        finalClass.display();  // Выведет: Это финальный класс.
+        
+        SubClass subClass = new SubClass(); // Ошибка компиляции: нельзя наследовать от final класса
+        subClass.show();
+    }
+}
+
+```
