@@ -1,11 +1,5 @@
-# Практика #22
+package Practice_22;
 
-
-## Практика #1
-
-Приведите примеры "вложение" класса в интерфейс и покажите способ вызова методе такого вложенного класса.
-
-```java
 interface MyInterface {
     // Вложенный статический класс
     class NestedClass {
@@ -21,7 +15,6 @@ public class Main {
         MyInterface.NestedClass nestedClass = new MyInterface.NestedClass();
         
         // Вызов метода вложенного класса
-        nestedClass.display(); /
+        nestedClass.display(); // Вывод: Hello, world!
     }
 }
-```
